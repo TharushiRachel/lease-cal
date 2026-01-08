@@ -31,10 +31,11 @@
           name="interestRate"
           step="0.01"
           min="0"
-          placeholder="Enter interest rate per period (%)"
+          placeholder="Enter annual interest rate (%)"
           required
           class="form-control"
         />
+        <small class="form-hint">Annual interest rate (e.g., 12 for 12% per year)</small>
       </div>
 
       <div class="form-group">
@@ -46,12 +47,13 @@
           id="numberOfPeriods"
           [(ngModel)]="numberOfPeriods"
           name="numberOfPeriods"
-          step="1"
-          min="1"
-          placeholder="Enter number of periods"
+          step="0.1"
+          min="0.1"
+          placeholder="Enter number of years"
           required
           class="form-control"
         />
+        <small class="form-hint">Number of years (e.g., 2.5 for 2 years and 6 months)</small>
       </div>
 
       <div class="form-group">
@@ -84,7 +86,7 @@
       <h3>Calculation Results</h3>
       <div class="result-card">
         <div class="result-item">
-          <span class="result-label">Installment Value:</span>
+          <span class="result-label">Monthly Installment Value:</span>
           <span class="result-value highlight">{{ installmentValue | number:'1.2-2' }}</span>
         </div>
         <div class="result-item">
@@ -92,7 +94,11 @@
           <span class="result-value">{{ (capital - upfronts) | number:'1.2-2' }}</span>
         </div>
         <div class="result-item">
-          <span class="result-label">Total Amount (n × Installment):</span>
+          <span class="result-label">Total Months:</span>
+          <span class="result-value">{{ (numberOfPeriods * 12) | number:'1.0-1' }}</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Total Amount (Monthly Installment × Total Months):</span>
           <span class="result-value">{{ totalAmount | number:'1.2-2' }}</span>
         </div>
         <div class="result-item">
