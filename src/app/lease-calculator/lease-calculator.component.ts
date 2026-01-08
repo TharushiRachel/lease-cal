@@ -27,11 +27,13 @@ export class LeaseCalculatorComponent {
 
   /**
    * Calculate the installment value using the formula:
-   * EMI = [P × R × (1+R)^N] / [(1+R)^N - 1]
+   * installmentValue = capital / ((1 - (1 + interestRate)^(-numberOfPeriods)) / interestRate)
+   * Which simplifies to:
+   * installmentValue = capital * interestRate / (1 - (1 + interestRate)^(-numberOfPeriods))
    * Where:
-   * P = Capital - Upfronts (net principal)
-   * R = Monthly interest rate (annual rate / 12 / 100)
-   * N = Number of periods
+   * capital = Capital - Upfronts (net principal)
+   * interestRate = Interest rate per period (as decimal, e.g., 0.05 for 5%)
+   * numberOfPeriods = Number of periods
    */
   calculateInstallment(): void {
     // Reset validation
@@ -45,9 +47,9 @@ export class LeaseCalculatorComponent {
       return;
     }
 
-    if (this.interestRate < 0) {
+    if (this.interestRate <= 0) {
       this.isValid = false;
-      this.errorMessage = 'Interest rate cannot be negative';
+      this.errorMessage = 'Interest rate must be greater than 0';
       return;
     }
 
@@ -72,19 +74,13 @@ export class LeaseCalculatorComponent {
     // Calculate net principal (capital after upfronts)
     const netPrincipal = this.capital - this.upfronts;
 
-    // Convert annual interest rate to monthly rate (as decimal)
-    const monthlyRate = this.interestRate / 12 / 100;
+    // Convert interest rate from percentage to decimal
+    const periodicRate = this.interestRate / 100;
 
-    // Calculate installment using EMI formula
-    if (monthlyRate === 0) {
-      // If interest rate is 0, simply divide principal by number of periods
-      this.installmentValue = netPrincipal / this.numberOfPeriods;
-    } else {
-      // Standard EMI formula
-      const numerator = netPrincipal * monthlyRate * Math.pow(1 + monthlyRate, this.numberOfPeriods);
-      const denominator = Math.pow(1 + monthlyRate, this.numberOfPeriods) - 1;
-      this.installmentValue = numerator / denominator;
-    }
+    // Calculate installment using the formula:
+    // installmentValue = capital * interestRate / (1 - (1 + interestRate)^(-numberOfPeriods))
+    const denominator = 1 - Math.pow(1 + periodicRate, -this.numberOfPeriods);
+    this.installmentValue = (netPrincipal * periodicRate) / denominator;
 
     // Calculate total amount and interest
     this.totalAmount = this.installmentValue * this.numberOfPeriods;
