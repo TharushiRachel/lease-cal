@@ -27,12 +27,11 @@ export class LeaseCalculatorComponent {
 
   /**
    * Calculate the installment value using the formula:
-   * installmentValue = (capital * (interestRate/12)) / (1 - (1 + interestRate/12)^(numberOfPeriods * 12))
+   * installmentValue = (capital * (interestRate/12)) / (1 - (1 + interestRate/12)^(numberOfPeriods))
    * Where:
    * - interestRate is annual percentage (e.g., 12 for 12%)
-   * - numberOfPeriods is in years
+   * - numberOfPeriods is in months
    * - interestRate/12 converts to monthly rate
-   * - numberOfPeriods * 12 converts years to months
    */
   calculateInstallment(): void {
     // Reset validation
@@ -52,9 +51,9 @@ export class LeaseCalculatorComponent {
       return;
     }
 
-    if (this.numberOfPeriods <= 0) {
+    if (this.numberOfPeriods <= 0 || !Number.isInteger(this.numberOfPeriods)) {
       this.isValid = false;
-      this.errorMessage = 'Number of periods must be greater than 0';
+      this.errorMessage = 'Number of periods must be a positive integer (months)';
       return;
     }
 
@@ -77,11 +76,11 @@ export class LeaseCalculatorComponent {
     // interestRate is annual percentage, so divide by 100 to get decimal, then by 12 for monthly
     const monthlyRate = (this.interestRate / 100) / 12;
 
-    // Calculate total number of months
-    const totalMonths = this.numberOfPeriods * 12;
+    // numberOfPeriods is already in months
+    const totalMonths = this.numberOfPeriods;
 
     // Calculate installment using the formula:
-    // installmentValue = (capital * (interestRate/12)) / (1 - (1 + interestRate/12)^(numberOfPeriods * 12))
+    // installmentValue = (capital * (interestRate/12)) / (1 - (1 + interestRate/12)^(numberOfPeriods))
     const numerator = netPrincipal * monthlyRate;
     const denominator = 1 - Math.pow(1 + monthlyRate, -totalMonths);
     this.installmentValue = numerator / denominator;
