@@ -1,0 +1,52 @@
+CREATE TABLE leads (
+    id BIGSERIAL PRIMARY KEY,
+    lead_name VARCHAR(255) NOT NULL,
+    creation_type VARCHAR(20) NOT NULL CHECK (creation_type IN ('PERSONAL', 'BUSINESS')),
+    product_type VARCHAR(20) CHECK (product_type IN ('OTHER','LEASE','ONE_OFF','TOD')),
+    is_existing_customer BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE parties (
+    id BIGSERIAL PRIMARY KEY,
+    lead_id BIGINT NOT NULL REFERENCES leads(id),
+    party_type VARCHAR(20) NOT NULL CHECK (party_type IN ('BORROWER','NON_BORROWER','RELATED')),
+    personal_name VARCHAR(255) NOT NULL,
+    email VARCHAR(255),
+    mobile_number VARCHAR(20),
+    date_of_birth DATE,
+    civil_status VARCHAR(20),
+    preferred_branch VARCHAR(100),
+    created_at TIMESTAMP DEFAULT NOW()
+);
+
+CREATE TABLE party_identifications (
+    id BIGSERIAL PRIMARY KEY,
+    party_id BIGINT NOT NULL REFERENCES parties(id),
+    identification_type VARCHAR(50) NOT NULL,
+    identification_number VARCHAR(100) NOT NULL
+);
+
+CREATE TABLE party_addresses (
+    id BIGSERIAL PRIMARY KEY,
+    party_id BIGINT NOT NULL REFERENCES parties(id),
+    address TEXT NOT NULL
+);
+
+CREATE TABLE related_parties (
+    id BIGSERIAL PRIMARY KEY,
+    lead_id BIGINT NOT NULL REFERENCES leads(id),
+    main_party_id BIGINT NOT NULL REFERENCES parties(id),
+    related_party_id BIGINT NOT NULL REFERENCES parties(id),
+    relationship_description TEXT,
+    consider_crib BOOLEAN DEFAULT FALSE,
+    consider_advance_analysis BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE income_sources (
+    id BIGSERIAL PRIMARY KEY,
+    party_id BIGINT NOT NULL REFERENCES parties(id),
+    income_type VARCHAR(50) NOT NULL,
+    consider_for_repayment BOOLEAN DEFAULT FALSE
+);
+
