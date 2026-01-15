@@ -2,7 +2,24 @@
   <div class="calculator-card">
     <h2>Lease Payment Calculator</h2>
     
-    <form (ngSubmit)="calculateInstallment()" class="calculator-form">
+    <div class="mode-toggle">
+      <button 
+        type="button" 
+        (click)="toggleCalculationMode()" 
+        [class.active]="!rateCalculationMode"
+        class="btn btn-mode">
+        Calculate Installment
+      </button>
+      <button 
+        type="button" 
+        (click)="toggleCalculationMode()" 
+        [class.active]="rateCalculationMode"
+        class="btn btn-mode">
+        Calculate Reducing Rate (RATE)
+      </button>
+    </div>
+    
+    <form (ngSubmit)="rateCalculationMode ? calculateRate() : calculateInstallment()" class="calculator-form">
       <div class="form-group">
         <label for="capital">
           Capital (C) <span class="required">*</span>
@@ -22,7 +39,7 @@
 
       <div class="form-group">
         <label for="interestRate">
-          Interest Rate (R) % <span class="required">*</span>
+          {{ rateCalculationMode ? 'Effective Rate (R) %' : 'Interest Rate (R) %' }} <span class="required">*</span>
         </label>
         <input
           type="number"
@@ -31,11 +48,13 @@
           name="interestRate"
           step="0.01"
           min="0"
-          placeholder="Enter annual interest rate (%)"
+          placeholder="Enter annual rate (%)"
           required
           class="form-control"
         />
-        <small class="form-hint">Annual interest rate (e.g., 12 for 12% per year)</small>
+        <small class="form-hint">
+          {{ rateCalculationMode ? 'Annual effective rate (e.g., 12 for 12% per year)' : 'Annual interest rate (e.g., 12 for 12% per year)' }}
+        </small>
       </div>
 
       <div class="form-group">
@@ -58,22 +77,24 @@
 
       <div class="form-group">
         <label for="upfronts">
-          Upfronts
+          Upfronts (months)
         </label>
         <input
           type="number"
           id="upfronts"
           [(ngModel)]="upfronts"
           name="upfronts"
-          step="0.01"
+          step="1"
           min="0"
-          placeholder="Enter upfront payment (optional)"
+          placeholder="Enter upfront months (optional)"
           class="form-control"
         />
       </div>
 
       <div class="button-group">
-        <button type="submit" class="btn btn-primary">Calculate Installment</button>
+        <button type="submit" class="btn btn-primary">
+          {{ rateCalculationMode ? 'Calculate Reducing Rate' : 'Calculate Installment' }}
+        </button>
         <button type="button" (click)="reset()" class="btn btn-secondary">Reset</button>
       </div>
     </form>
@@ -82,7 +103,8 @@
       <p>{{ errorMessage }}</p>
     </div>
 
-    <div *ngIf="isValid && installmentValue > 0" class="result-section">
+    <!-- Installment Calculation Results -->
+    <div *ngIf="!rateCalculationMode && isValid && installmentValue > 0" class="result-section">
       <h3>Calculation Results</h3>
       <div class="result-card">
         <div class="result-item">
@@ -90,8 +112,8 @@
           <span class="result-value highlight">{{ installmentValue | number:'1.2-2' }}</span>
         </div>
         <div class="result-item">
-          <span class="result-label">Net Principal (C - Upfronts):</span>
-          <span class="result-value">{{ (capital - upfronts) | number:'1.2-2' }}</span>
+          <span class="result-label">Lease Capital (C):</span>
+          <span class="result-value">{{ capital | number:'1.2-2' }}</span>
         </div>
         <div class="result-item">
           <span class="result-label">Total Months:</span>
@@ -104,6 +126,33 @@
         <div class="result-item">
           <span class="result-label">Total Interest:</span>
           <span class="result-value">{{ totalInterest | number:'1.2-2' }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Rate Calculation Results -->
+    <div *ngIf="rateCalculationMode && isValid && calculatedRate > 0" class="result-section">
+      <h3>Reducing Rate Calculation Results (Excel RATE Function)</h3>
+      <div class="result-card">
+        <div class="result-item">
+          <span class="result-label">Reducing Monthly Rate:</span>
+          <span class="result-value highlight">{{ calculatedRate | number:'1.4-4' }}%</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Reducing Annual Rate:</span>
+          <span class="result-value highlight">{{ calculatedAnnualRate | number:'1.2-2' }}%</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Lease Capital (C):</span>
+          <span class="result-value">{{ capital | number:'1.2-2' }}</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Monthly Installment (from effective rate):</span>
+          <span class="result-value">{{ rateInstallment | number:'1.2-2' }}</span>
+        </div>
+        <div class="result-item">
+          <span class="result-label">Number of Periods:</span>
+          <span class="result-value">{{ numberOfPeriods | number:'1.0-0' }} months</span>
         </div>
       </div>
     </div>
