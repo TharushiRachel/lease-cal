@@ -105,8 +105,17 @@
         <label for="reducingRate">Reducing Rate (Annual %)</label>
       </div>
     </div>
+    <div class="d-flex w-100-p justify-content-between p-2" *ngIf="isCalculate">
+      <div class="md-form w-100-p">
+        <p class="mb-0">
+          Lease Rental: {{ addFacilitiesForm.get('leaseRental') ? addFacilitiesForm.get('leaseRental').value : '' }}
+        </p>
+      </div>
+    </div>
   </form>
 </div>
+
+
 
 <div class="modal-footer modal-end">
    <button type="button" mdbBtn color="success" class="relative waves-light" mdbWavesEffect size="sm"
