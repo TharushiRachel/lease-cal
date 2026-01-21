@@ -1,0 +1,113 @@
+<div class="modal-header modal-topic">
+  <h4 class="modal-title w-100 font-weight-bold">Add Facilities</h4>
+  <button type="button" class="close" data-dismiss="modal" aria-label="Close" (click)="onCloseModel()">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+
+<div class="modal-body mx-3 modal-detail form-margin">
+
+  <form class="d-flex p-2 flex-column justify-content-start align-items-start w-100-p" [formGroup]="addFacilitiesForm">
+    <div class="d-flex w-100-p justify-content-between p-2">
+      <div class="md-form w-45-p">
+        <label for="facilityDescription">Facility Description *</label>
+        <textarea type="text" id="facilityDescription" class="form-control border-bottom" maxlength="4000"
+          appTextAreaAutoHeight formControlName="facilityDescription" [wrap]="'hard'" mdbInput></textarea>
+      </div>
+      <div class="md-form w-45-p">
+        <input mdbValidate type="number" id="leaseAmount" maxlength="200" formControlName="leaseAmount"
+          class="form-control" mdbInput>
+        <label for="leaseAmount"> Lease Amount (LKR) *</label>
+        <mdb-error *ngIf="formErrors.leaseAmount.required">Lease Amount Required</mdb-error>
+      </div>
+    </div>
+
+    <div class="d-flex w-100-p justify-content-between p-2">
+      <div class="md-form w-45-p">
+        <input mdbValidate type="text" id="model" maxlength="200" formControlName="model" class="form-control" mdbInput>
+        <label for="model">Model *</label>
+        <mdb-error *ngIf="formErrors.model.required">Model Required</mdb-error>
+      </div>
+      <div class="md-form w-45-p">
+        <input mdbValidate type="text" id="make" maxlength="200" formControlName="make" class="form-control" mdbInput>
+        <label for="make">Make *</label>
+        <mdb-error *ngIf="formErrors.make.required">Make Required</mdb-error>
+      </div>
+    </div>
+
+    <div class="d-flex w-100-p justify-content-between p-2">
+      <div class="md-form w-45-p">
+        <input mdbValidate type="number" id="requestedTenure" maxlength="200" formControlName="requestedTenure"
+          class="form-control" mdbInput>
+        <label for="requestedTenure">Requested Tenure *</label>
+        <mdb-error *ngIf="formErrors.requestedTenure.required">Requested Tenure Required</mdb-error>
+      </div>
+      <div class="md-form w-45-p">
+        <input mdbValidate type="text" id="repaymentMode" maxlength="200" formControlName="repaymentMode"
+          class="form-control" placeholder="Choose Repayment Mode" [mdbAutoCompleter]="auto1" mdbInput>
+
+        <mdb-auto-completer #auto1="mdbAutoCompleter" textNoResults="I have found no results :(">
+          <mdb-option *ngFor="let option of repaymentDropDown" [value]="option.label">
+            {{ option.label }}
+          </mdb-option>
+        </mdb-auto-completer>
+        <label for="repaymentMode">Repayment Mode *</label>
+        <mdb-error *ngIf="formErrors.repaymentMode.required">Repayment Mode Required</mdb-error>
+      </div>
+    </div>
+
+    <div class="d-flex w-100-p justify-content-between p-2">
+      <div class="md-form w-45-p">
+        <input mdbValidate type="number" id="effectiveRate" maxlength="200" formControlName="effectiveRate"
+          class="form-control" mdbInput>
+        <label for="effectiveRate">Effective Rate *</label>
+        <mdb-error *ngIf="formErrors.effectiveRate.required">Effective Rate Required</mdb-error>
+      </div>
+      <div class="md-form w-45-p">
+        <input mdbValidate type="number" id="upfront" maxlength="200" formControlName="upfront" class="form-control"
+          mdbInput>
+        <label for="upfront">Upfront *</label>
+        <mdb-error *ngIf="formErrors.upfront.required">Upfront Required</mdb-error>
+      </div>
+    </div>
+
+    <div class="d-flex w-100-p justify-content-between p-2">
+      <div class="md-form w-45-p">
+        <input mdbValidate type="number" id="processingFee" maxlength="200" formControlName="processingFee"
+          class="form-control" mdbInput>
+        <label for="processingFee">Processing Fee *</label>
+        <mdb-error *ngIf="formErrors.processingFee.required">Processing Fee Required</mdb-error>
+      </div>
+      <div class="md-form w-45-p">
+        <input mdbValidate type="text" id="insurance" maxlength="200" formControlName="insurance" class="form-control"
+          [disabled]="true" mdbInput>
+        <label for="insurance">Insurance *</label>
+      </div>
+    </div>
+
+    <div class="d-flex w-100-p justify-content-between p-2">
+      <div class="md-form w-45-p">
+        <input mdbValidate type="text" id="validityOfOffer" maxlength="200" formControlName="validityOfOffer"
+          class="form-control" [disabled]="true" mdbInput>
+        <label for="validityOfOffer">Validity Of Offer *</label>
+      </div>
+    </div>
+
+     <div class="d-flex w-100-p justify-content-between p-2">
+      <div class="md-form w-45-p">
+        <input mdbValidate type="number" id="leaseRental" maxlength="200" formControlName="leaseRental"
+          class="form-control" [disabled]="true" mdbInput>
+        <label for="leaseRental">Lease Rental</label>
+      </div>
+    </div>
+  </form>
+</div>
+
+<div class="modal-footer modal-end">
+   <button type="button" mdbBtn color="success" class="relative waves-light" mdbWavesEffect size="sm"
+     (click)="calculate()">Calculate
+  </button>
+  <button type="button" mdbBtn color="secondary" class="relative waves-light" mdbWavesEffect size="sm"
+    [disabled]="!isFormValid()" (click)="save()">Save
+  </button>
+</div>
