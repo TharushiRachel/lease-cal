@@ -93,7 +93,13 @@
       </div>
     </div>
 
-     <div class="d-flex w-100-p justify-content-between p-2">
+    <div class="d-flex w-100-p justify-content-start p-2">
+      <button type="button" mdbBtn color="success" class="relative waves-light" mdbWavesEffect size="sm"
+        (click)="calculate()">Calculate
+      </button>
+    </div>
+
+    <div class="d-flex w-100-p justify-content-between p-2" *ngIf="isCalculate">
       <div class="md-form w-45-p">
         <input mdbValidate type="number" id="leaseRental" maxlength="200" formControlName="leaseRental"
           class="form-control" [disabled]="true" mdbInput>
@@ -105,22 +111,12 @@
         <label for="reducingRate">Reducing Rate (Annual %)</label>
       </div>
     </div>
-    <div class="d-flex w-100-p justify-content-between p-2" *ngIf="isCalculate">
-      <div class="md-form w-100-p">
-        <p class="mb-0">
-          Lease Rental: {{ addFacilitiesForm.get('leaseRental') ? addFacilitiesForm.get('leaseRental').value : '' }}
-        </p>
-      </div>
-    </div>
   </form>
 </div>
 
 
 
 <div class="modal-footer modal-end">
-   <button type="button" mdbBtn color="success" class="relative waves-light" mdbWavesEffect size="sm"
-     (click)="calculate()">Calculate
-  </button>
   <button type="button" mdbBtn color="secondary" class="relative waves-light" mdbWavesEffect size="sm"
     [disabled]="!isFormValid()" (click)="save()">Save
   </button>
