@@ -89,6 +89,7 @@ export class LeadComprehensiveFacilitieseComponent implements OnInit {
       facilityDescription: ["", [Validators.required]],
       requestedTenure: [{ value: "" }, [Validators.required]],
       leaseRental: [{ value: "" }, [Validators.required]],
+      reducingRate: [{ value: "", disabled: true }],
       processingFee: [{ value: "" }, [Validators.required]],
       validityOfOffer: [{ value: "7 Days from the date of issue", disabled: true }],
       leaseAmount: [{ value: "" }, [Validators.required]],
@@ -145,12 +146,15 @@ export class LeadComprehensiveFacilitieseComponent implements OnInit {
     this.upfronts = Number(upfront);
 
     this.calculateInstallment();
+    this.calculateRate();
 
     if (this.isCalculationValid) {
       this.addFacilitiesForm.controls.leaseRental.setValue(this.installmentValue);
+      this.addFacilitiesForm.controls.reducingRate.setValue(this.calculatedAnnualRate);
       this.isCalculate = true;
     } else {
       this.addFacilitiesForm.controls.leaseRental.setValue('');
+      this.addFacilitiesForm.controls.reducingRate.setValue('');
       this.isCalculate = false;
     }
   }
