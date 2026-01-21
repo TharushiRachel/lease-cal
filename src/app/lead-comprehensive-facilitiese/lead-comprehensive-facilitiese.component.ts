@@ -129,8 +129,25 @@ export class LeadComprehensiveFacilitieseComponent implements OnInit {
   }
 
   calculate() {
-    this.addFacilitiesForm.controls.leaseRental.setValue("454545");
-    this.isCalculate = true
+    const leaseAmount = this.addFacilitiesForm.get('leaseAmount')?.value;
+    const effectiveRate = this.addFacilitiesForm.get('effectiveRate')?.value;
+    const requestedTenure = this.addFacilitiesForm.get('requestedTenure')?.value;
+    const upfront = this.addFacilitiesForm.get('upfront')?.value;
+
+    this.capital = Number(leaseAmount);
+    this.interestRate = Number(effectiveRate);
+    this.numberOfPeriods = Number(requestedTenure);
+    this.upfronts = Number(upfront);
+
+    this.calculateInstallment();
+
+    if (this.isCalculationValid) {
+      this.addFacilitiesForm.controls.leaseRental.setValue(this.installmentValue);
+      this.isCalculate = true;
+    } else {
+      this.addFacilitiesForm.controls.leaseRental.setValue('');
+      this.isCalculate = false;
+    }
   }
 
   /**
