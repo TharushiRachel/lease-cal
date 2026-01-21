@@ -129,10 +129,15 @@ export class LeadComprehensiveFacilitieseComponent implements OnInit {
   }
 
   calculate() {
-    const leaseAmount = this.addFacilitiesForm.get('leaseAmount')?.value;
-    const effectiveRate = this.addFacilitiesForm.get('effectiveRate')?.value;
-    const requestedTenure = this.addFacilitiesForm.get('requestedTenure')?.value;
-    const upfront = this.addFacilitiesForm.get('upfront')?.value;
+    const leaseAmountControl = this.addFacilitiesForm.get('leaseAmount');
+    const effectiveRateControl = this.addFacilitiesForm.get('effectiveRate');
+    const requestedTenureControl = this.addFacilitiesForm.get('requestedTenure');
+    const upfrontControl = this.addFacilitiesForm.get('upfront');
+
+    const leaseAmount = leaseAmountControl ? leaseAmountControl.value : null;
+    const effectiveRate = effectiveRateControl ? effectiveRateControl.value : null;
+    const requestedTenure = requestedTenureControl ? requestedTenureControl.value : null;
+    const upfront = upfrontControl ? upfrontControl.value : null;
 
     this.capital = Number(leaseAmount);
     this.interestRate = Number(effectiveRate);
