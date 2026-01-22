@@ -16,7 +16,7 @@
       </div>
       <div class="md-form w-45-p">
         <input mdbValidate type="number" id="leaseAmount" maxlength="200" formControlName="leaseAmount"
-          class="form-control" mdbInput>
+          class="form-control" mdbInput (input)="calculate()">
         <label for="leaseAmount"> Lease Amount (LKR) *</label>
         <mdb-error *ngIf="formErrors.leaseAmount.required">Lease Amount Required</mdb-error>
       </div>
@@ -38,7 +38,7 @@
     <div class="d-flex w-100-p justify-content-between p-2">
       <div class="md-form w-45-p">
         <input mdbValidate type="number" id="requestedTenure" maxlength="200" formControlName="requestedTenure"
-          class="form-control" mdbInput>
+          class="form-control" mdbInput (input)="calculate()">
         <label for="requestedTenure">Requested Tenure *</label>
         <mdb-error *ngIf="formErrors.requestedTenure.required">Requested Tenure Required</mdb-error>
       </div>
@@ -59,13 +59,13 @@
     <div class="d-flex w-100-p justify-content-between p-2">
       <div class="md-form w-45-p">
         <input mdbValidate type="number" id="effectiveRate" maxlength="200" formControlName="effectiveRate"
-          class="form-control" mdbInput>
+          class="form-control" mdbInput (input)="calculate()">
         <label for="effectiveRate">Effective Rate *</label>
         <mdb-error *ngIf="formErrors.effectiveRate.required">Effective Rate Required</mdb-error>
       </div>
       <div class="md-form w-45-p">
         <input mdbValidate type="number" id="upfront" maxlength="200" formControlName="upfront" class="form-control"
-          mdbInput>
+          mdbInput (input)="calculate()">
         <label for="upfront">Upfront *</label>
         <mdb-error *ngIf="formErrors.upfront.required">Upfront Required</mdb-error>
       </div>
@@ -91,12 +91,6 @@
           class="form-control" [disabled]="true" mdbInput>
         <label for="validityOfOffer">Validity Of Offer *</label>
       </div>
-    </div>
-
-    <div class="d-flex w-100-p justify-content-start p-2">
-      <button type="button" mdbBtn color="success" class="relative waves-light" mdbWavesEffect size="sm"
-        (click)="calculate()">Calculate
-      </button>
     </div>
 
     <div class="d-flex w-100-p justify-content-between p-2" *ngIf="isCalculate">
